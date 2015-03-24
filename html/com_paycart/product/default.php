@@ -86,12 +86,12 @@ paycart.queue.push('$("#pc-screenshots-carousel").owlCarousel({ lazyLoad : true,
 		 		
 		 		<!-- Filterable Attributes -->
 		 		<?php if(!empty($selectors)):?>
+		 		<hr/>
 		 		<div>
 		 		    <form class="pc-product-selector" method="post">
 		 		    	 <fieldset>		 		    	 	
 					    	<?php foreach ($selectors as $productAttributeId => $data):?>
 					    		<?php $instance  = PaycartProductAttribute::getInstance($productAttributeId);?>
-					    		<hr/>
 					    		<div class="row">
 					    		<div class="form-group pull-left col-xs-12">
 					    			<label class="text-muted"><?php echo $instance->getTitle();?>:</label>
