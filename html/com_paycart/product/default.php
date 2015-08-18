@@ -13,10 +13,10 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );?>
 
 <?php 
-Rb_Html::script(PAYCART_PATH_CORE_MEDIA.'/jquery.fancybox.min.js');
+Rb_Html::script(PAYCART_PATH_CORE_MEDIA.'/owl.carousel.min.js');
+Rb_Html::stylesheet(PAYCART_PATH_CORE_MEDIA.'/owl.carousel.css');
 
-Rb_Html::stylesheet(PAYCART_PATH_CORE_MEDIA.'/jquery.fancybox.css');
-
+echo $this->loadTemplate('js');
 
 /**
  * Template Parameters
@@ -26,27 +26,15 @@ Rb_Html::stylesheet(PAYCART_PATH_CORE_MEDIA.'/jquery.fancybox.css');
  * 
  */
 
- $position = 'pc-product-media-gallery';
 $attributes = $product->getAttributes();
 $postionedAttributes = (array)$product->getPositionedAttributes();
 
-$showMediaGallery = false;
-  if(isset($plugin_result) && isset($plugin_result[$position]) && !empty($plugin_result[$position])):
-  	$showMediaGallery = true;
-  	
-  else :
-  	Rb_Html::script(PAYCART_PATH_CORE_MEDIA.'/owl.carousel.min.js');
-	Rb_Html::stylesheet(PAYCART_PATH_CORE_MEDIA.'/owl.carousel.css');
-	?>
-	<script>
-				paycart.queue.push('$("#pc-screenshots-carousel").owlCarousel({ lazyLoad : true, singleItem:true, autoHeight : true, pagination:true });');
-	</script><?php 
-  endif;
- $this->assign('showMediaGallery', $showMediaGallery);
- echo $this->loadTemplate('js');
  echo  Rb_HelperTemplate::renderLayout('paycart_spinner'); 
 
 ?>
+<script>
+paycart.queue.push('$("#pc-screenshots-carousel").owlCarousel({ lazyLoad : true, singleItem:true, autoHeight : true, pagination:true });');
+</script>
 
 <div class='pc-product-fullview-wrapper clearfix'>
 
@@ -58,24 +46,15 @@ $showMediaGallery = false;
 				Left Layout
 		 =========================== -->
 		 <div class="col-sm-12 col-md-6">
-	 		
-	        <?php if($showMediaGallery):?>
-                <div class="<?php echo $position;?>">
-                        <?php echo $plugin_result[$position]; ?>
-                </div>
-      			<?php 
-	 		 else:
-	 		?>
-	 		<div id="pc-screenshots-carousel" class="owl-carousel pc-screenshots center text-center">
-			 
+		 	<div id="pc-screenshots-carousel" class="owl-carousel pc-screenshots center text-center">
+			 	<?php $counter = 0; ?>
 			    <?php foreach($product->getImages() as $mediaId => $detail):?>
-				    <a class="pc-fancybox" rel="gallery1" href="<?php echo $detail['original'];?>">
-				    	<img class="lazyOwl" data-src="<?php echo $detail['optimized'];?>" />
-				    </a>
+				    <div>
+				    	<img class="lazyOwl" data-src="<?php echo $detail['original'];?>" />
+				    </div>
+				    <?php $counter++; ?>
 				<?php endforeach;?>
 	 		</div>
-	 		<?php endif;?>
-	 		
 		 </div>
 	
 		 <!-- ======================
@@ -107,12 +86,12 @@ $showMediaGallery = false;
 		 		
 		 		<!-- Filterable Attributes -->
 		 		<?php if(!empty($selectors)):?>
-				<hr />
 		 		<div>
 		 		    <form class="pc-product-selector" method="post">
 		 		    	 <fieldset>		 		    	 	
 					    	<?php foreach ($selectors as $productAttributeId => $data):?>
 					    		<?php $instance  = PaycartProductAttribute::getInstance($productAttributeId);?>
+					    		<hr/>
 					    		<div class="row">
 					    		<div class="form-group pull-left col-xs-12">
 					    			<label class="text-muted"><?php echo $instance->getTitle();?>:</label>
@@ -163,54 +142,21 @@ $showMediaGallery = false;
                 <!-- ======================
 				Position == product-addons	
 		 		=========================== -->		 		
-		 		<div>		
-					<?php $position = 'pc-product-addons';?> 		
-			 		<div class="<?php echo $position;?>"> 			
-			 			<?php if(isset($postionedAttributes['product-addons']) && !empty($postionedAttributes['product-addons'])) : ?>
-			 				<ul>
-			 				<?php foreach($postionedAttributes['product-addons'] as $attributeId) : ?>
-			 					<?php if(isset($attributes[$attributeId]) && !empty($attributes[$attributeId])) :?>
-			 						<?php $instance = PaycartProductAttribute::getInstance($attributeId);?>
-									<?php $options 	= $instance->getOptions();?> 
-									<li><?php echo $options[$attributes[$attributeId]]->title;?></li>
-								<?php endif?>	                         
-			 				<?php endforeach;?>
-			 				</ul>
-			 				 <hr/>
-			 			<?php endif;?>
-			 			
-				 		 <?php if(isset($plugin_result) && isset($plugin_result[$position])):?>
-						 <div>
-			                  <?php echo $plugin_result[$position]; ?>
-						 </div>
-						  <hr/>
-		      			 <?php endif;?>
-			 		</div>
+		 		<div class="row">		 		
+		 		<div class="pc-product-addons col-xs-12"> 			
+		 			<?php if(isset($postionedAttributes['product-addons']) && !empty($postionedAttributes['product-addons'])) : ?>
+		 				<ul>
+		 				<?php foreach($postionedAttributes['product-addons'] as $attributeId) : ?>
+		 					<?php if(isset($attributes[$attributeId]) && !empty($attributes[$attributeId])) :?>
+		 						<?php $instance = PaycartProductAttribute::getInstance($attributeId);?>
+								<?php $options 	= $instance->getOptions();?> 
+								<li><?php echo $options[$attributes[$attributeId]]->title;?></li>
+							<?php endif?>	                         
+		 				<?php endforeach;?>
+		 				</ul>
+		 			<?php endif;?>
 		 		</div>
-		 		
-		 		 <!-- ======================
-				Position == product-teaser	
-		 		=========================== -->	
-		 		<?php if(!empty($digital_teasers) && $product->getType() == Paycart::PRODUCT_TYPE_DIGITAL):?>
-			 		<div class="teaser-download clearfix">
-				 		<div class="pc-product-teaser">
-				 			<h4><span class="text-muted"><?php echo JText::_("COM_PAYCART_PRODUCT_DIGITAL_GET_SAMPLE")?></span></h4>
-				 			<ul class="list-unstyled">
-				 			<?php foreach ($digital_teasers as $id => $data):?>
-				 				 <li>
-				 				 	<?php $fileName  = base64_encode('file-'.$id);?>
-				 				 	<?php $extension = JFile::getExt($data['filename']);?>
-				 				 	<a href="javascript:void(0);" onClick="rb.url.redirect('<?php echo PaycartRoute::_('index.php?option=com_paycart&view=product&task=serveTeaser&product_id='.$product->getId().'&file_id='.$fileName)?>')">
-				 				 		<i class="fa fa-download dwn-icon"></i> <?php echo $data['title']?>
-				 				 	</a>
-									<span class="text-muted"><?php echo ' ('.$extension.')';?></span>
-				 				 </li>
-				 			<?php endforeach;?>
-				 			</ul>
-				 		</div>
-				 	</div>
-				 	<hr/>
-			 	<?php endif;?>			 	
+		 		</div>
 		 </div>
 	 </div>
 	 

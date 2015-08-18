@@ -12,7 +12,6 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );
 ?>
 
-<?php echo $this->loadTemplate('css');?>
 <script type="text/javascript">
 (function($){
 	//Specific to Safari bowser, it diplays cached data when back button is clicked
@@ -24,37 +23,12 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 	});
 	
 	$(document).ready(function(){
-<?php if(!$showMediaGallery): ?>
+
 		$("#pc-screenshots-carousel").owlCarousel({ 
 			lazyLoad : true, singleItem:true, 
-			autoHeight : true, pagination:true ,
-			navigation:true,
-		    navigationText: [
-		      "<i class='fa fa-chevron-left fa-3 '></i>",
-		      "<i class='fa fa-chevron-right fa-3'></i>"
-		      ],
+			autoHeight : true, pagination:true 
 		});
 
-<?php endif;?>
-		$(".pc-fancybox").fancybox({
-			 'type': 'iframe', 
-			  fitToView : false,
-			  autoSize  : false,
-			  openEffect  : 'elastic',
-             closeEffect : 'elastic',
-			 live : false,
-			  afterLoad : function() {
-				  $('.fancybox-iframe').contents().find('head').append('<style type="text/css">img{max-width:100%!important;max-height:100%!important;margin: auto;position: absolute;top: 0; left: 0; bottom: 0; right: 0;}</style>');
-				  }
-		});
-
-		$('div.accordion-body').on('shown', function () {
-			$(this).parent("div").find(".fa-plus-square").removeClass("fa-plus-square").addClass("fa-minus-square");
-		});
-
-		$('div.accordion-body').on('hidden', function () {
-			$(this).parent("div").find(".fa-minus-square").removeClass("fa-minus-square").addClass("fa-plus-square")
-		});
 	});
 	
 	paycart.product = {};
