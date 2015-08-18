@@ -49,9 +49,9 @@ defined( '_JEXEC' ) OR die( 'Restricted access' );
 		 	
 			<!-- Addresses Block		 	-->
 		 	<div class="row">
-		 	
+		 	<?php $class=($isShippableProductExist)?'col-sm-6':'col-sm-12'?>
 		 	<!--	Billing Address	 		-->
-		 		<div class="col-sm-6">				
+		 		<div class="<?php echo $class?>">			
 		 			<div class="accordion-group panel panel-default">
 		 				<div class="accordion-heading panel-heading">
 		 					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-parent" href="#pc-confirm-billing-address">
@@ -75,36 +75,39 @@ defined( '_JEXEC' ) OR die( 'Restricted access' );
 		 			</div>
 		 		</div>
 		 		
-		 		<!-- Shipping Address 		-->
-		 		<div class="col-sm-6">
-		 			<div class="accordion-group panel panel-default">
-		 				<div class="accordion-heading panel-heading">
-		 					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-parent" href="#pc-confirm-shipping-address">
-		 						<?php echo JText::_("COM_PAYCART_SHIPPING_ADDRESS_TITLE"); ?>
-		 					</a>
-		 				</div>
-				 		<div id="pc-confirm-shipping-address" class="accordion-body in collapse"">
-				 			<div class="accordion-inner panel-body">
-				 				<?php
-				 					if ( @$billing_to_shipping ) {
-				 						echo '<i class="fa fa-clipboard"></i> ' . JText::_('COM_PAYCART_CART_ADDRESS_SAME_AS_BILLING');
-				 					} else {
-				 						$layout = new JLayoutFile('paycart_buyeraddress_display');
-										echo $layout->render($shipping_address);
-				 					} 
-				 				?>	
-								
-								<div>
-			 						<a href="#"  onclick="return paycart.cart.address.get();"> <i class="fa fa-edit"></i>  <?php echo JText::_('COM_PAYCART_EDIT')?> </a>
-			 					</div>
-								
-				 			</div>
-				 		</div>
-		 			</div>
-		 		</div>
+		 		<?php if($isShippableProductExist):?>
+			 		<!-- Shipping Address 		-->
+			 		<div class="col-sm-6">
+			 			<div class="accordion-group panel panel-default">
+			 				<div class="accordion-heading panel-heading">
+			 					<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-parent" href="#pc-confirm-shipping-address">
+			 						<?php echo JText::_("COM_PAYCART_SHIPPING_ADDRESS_TITLE"); ?>
+			 					</a>
+			 				</div>
+					 		<div id="pc-confirm-shipping-address" class="accordion-body in collapse"">
+					 			<div class="accordion-inner panel-body">
+					 				<?php
+					 					if ( @$billing_to_shipping ) {
+					 						echo '<i class="fa fa-clipboard"></i> ' . JText::_('COM_PAYCART_CART_ADDRESS_SAME_AS_BILLING');
+					 					} else {
+					 						$layout = new JLayoutFile('paycart_buyeraddress_display');
+											echo $layout->render($shipping_address);
+					 					} 
+					 				?>	
+									
+									<div>
+				 						<a href="#"  onclick="return paycart.cart.address.get();"> <i class="fa fa-edit"></i>  <?php echo JText::_('COM_PAYCART_EDIT')?> </a>
+				 					</div>
+									
+					 			</div>
+					 		</div>
+			 			</div>
+			 		</div>
+		 		<?php endif;?>
 		 	</div>
 			
 			<!-- Shipping Options		 	-->
+			<?php if($isShippableProductExist):?>
 		 	<div class="row">
 		 		<div class="col-sm-12">	
 		 		<div class="accordion-group panel panel-default">
@@ -146,6 +149,7 @@ defined( '_JEXEC' ) OR die( 'Restricted access' );
 	 			</div>
 	 			</div>
 		 	</div>
+		 	<?php endif;?>
 		 	
 			<!-- Product Summary		 	-->
 		 	<?php echo $this->loadTemplate('confirm_product_summary')?>	 	
@@ -178,10 +182,12 @@ defined( '_JEXEC' ) OR die( 'Restricted access' );
 		 							<td><?php echo $formatter->amount($product_total, true, $currency_id); ?></td>
 		 						</tr>
 		 						
+		 						<?php if($isShippableProductExist):?>
 		 						<tr>
 		 							<td><?php echo JText::_('COM_PAYCART_SHIPPING'); ?></td>
 		 							<td><?php echo $formatter->amount($shipping_total, true, $currency_id); ?></td>
 		 						</tr>
+		 						<?php endif;?>
 		 						
 		 						<?php if(!empty($duties_particular) && floatval($duties_total) != 0):?>
 			 						<tr>
