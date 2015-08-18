@@ -35,20 +35,21 @@ defined( '_JEXEC' ) OR die( 'Restricted access' );
 	
 		<!--	Shipping Address	-->
 		<div class=" col-sm-6 pc-checkout-shipping clearfix">
-		
-			<h3><?php echo JText::_('COM_PAYCART_ADDRESS_SHIPPING'); ?></h3>			
-			<div class="checkbox">
-				<label>
-				<input 	id='billing_to_shipping' type="checkbox" 
-						<?php echo ($billing_to_shipping)? 'checked="checked"' : ''?>		
-						name="paycart_cart_address[billing_to_shipping]"
-						onClick="return paycart.cart.address.onBillingToShipping();"
-						value='true'
-				/><?php echo JText::_('COM_PAYCART_SAME_ADDRESS_TEXT'); ?>					
-				</label>
+			<?php $class = ($isShippableProductExist)?'':'hide';?>
+			<div class="<?php echo $class;?>">
+				<h3><?php echo JText::_('COM_PAYCART_ADDRESS_SHIPPING'); ?></h3>			
+				<div class="checkbox">
+					<label>
+					<input 	id='billing_to_shipping' type="checkbox" 
+							<?php echo ($billing_to_shipping)? 'checked="checked"' : ''?>		
+							name="paycart_cart_address[billing_to_shipping]"
+							onClick="return paycart.cart.address.onBillingToShipping();"
+							value='true'
+					/><?php echo JText::_('COM_PAYCART_SAME_ADDRESS_TEXT'); ?>					
+					</label>
+				</div>
 			</div>
-			
-			<div class="pc-checkout-shipping-html">
+			<div class="pc-checkout-shipping-html <?php echo $class;?>">
 			 	<?php
 					// load shipping address template
 			 		echo $this->loadTemplate('address_shipping');
