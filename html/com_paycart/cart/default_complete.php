@@ -99,15 +99,20 @@ defined( '_JEXEC' ) OR die( 'Restricted access' );
 				<hr />
 			</div>
 			<div>
-				<h4><?php echo JText::_('COM_PAYCART_ADDRESS_SHIPPING');?></h4>
-				<div>
-					<?php echo Rb_HelperTemplate::renderLayout('paycart_buyeraddress_display', $shippingAddress);?>
-				</div>
+				<?php if(!$isShippableProductExist):?>
+					<h4><?php echo JText::_('COM_PAYCART_ADDRESS_BILLING');?></h4>
+					<div>
+						<?php echo Rb_HelperTemplate::renderLayout('paycart_buyeraddress_display', $billingAddress);?>
+					</div>					
+				<?php else:?>
+					<h4><?php echo JText::_('COM_PAYCART_ADDRESS_SHIPPING');?></h4>
+					<div>
+						<?php echo Rb_HelperTemplate::renderLayout('paycart_buyeraddress_display', $shippingAddress);?>
+					</div>
+				<?php endif;?>	
 				<hr />
 			</div> 		
-			<div>
-				<div class="alert alert-warning"><?php echo JText::_('COM_PAYCART_DELIVERY_STATUS');?> : <i class="fa fa-spinner"></i> <strong><?php echo JText::_('COM_PAYCART_SHIPMENT_STATUS_PENDING');?></strong></div>
-			</div>
+			
  		</div>
  	</div>
  	
@@ -158,14 +163,15 @@ defined( '_JEXEC' ) OR die( 'Restricted access' );
  		
  	<div class="row">
  		<div class="col-sm-5">
-			<a href="<?php echo JRoute::_('index.php?option=com_paycart&view=productcategory&task=display');?>" class="btn btn-lg input-block-level btn-info form-control"><?php echo JText::_('COM_PAYCART_KEEP_SHOPPING');?></a> 		
+			<a href="<?php echo JRoute::_('index.php?option=com_paycart&view=productcategory&task=display');?>" class="btn btn-lg input-block-level btn-info btn-block"><?php echo JText::_('COM_PAYCART_KEEP_SHOPPING');?></a> 		
  		</div>
  		<div class="col-sm-2">
  			<h4 class="text-muted center"><?php echo JText::_('COM_PAYCART_OR');?></h4>
  		</div>
  		<div class="col-sm-5">
  			<?php if($payment_status == PaycartHelperInvoice::STATUS_TRANSACTION_PAYMENT_COMPLETE || $payment_status == PaycartHelperInvoice::STATUS_TRANSACTION_PAYMENT_PENDING) :?>
-				<a href="<?php echo $track_url;?>" class="btn btn-lg input-block-level btn-default form-control"><?php echo JText::_('COM_PAYCART_TRACK_ORDER');?></a>
+ 				<?php $text = (!$isShippableProductExist)?JText::_('COM_PAYCART_GET_DOWNLOADS'):JText::_('COM_PAYCART_TRACK_ORDER')?>
+				<a href="<?php echo $track_url;?>" class="btn btn-lg input-block-level btn-default btn-block"><?php echo $text;?></a>
 			<?php else:?>
 			 	<a href="<?php echo JRoute::_('index.php?option=com_paycart&view=cart&task=unlock&cart_id='.$cart->cart_id.'&'.JSession::getFormToken().'=1');?>" class="btn btn-lg input-block-level btn-default form-control"><?php echo JText::_('COM_PAYCART_PAY_AGAIN');?></a>
 			<?php endif;?>
